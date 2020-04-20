@@ -56,6 +56,9 @@ def create_app():
     def tc():
         return render_template('terms&condition.html')
 
-    app.run(debug=True)
-
     return app
+
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)
