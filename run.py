@@ -2,6 +2,9 @@ import psycopg2
 from flask import Flask, render_template
 import os
 
+conn = None
+cur = None
+
 
 # @app.route('/contact')
 # def contact():
@@ -12,7 +15,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '9fc26a8960d2f5ed4126dde9830e49f4'
 
-    global conn
+    global conn, cur
     try:
         conn = psycopg2.connect("dbname='Merken' user='postgres' host='localhost' password='D3VAR5H'")
     except:
