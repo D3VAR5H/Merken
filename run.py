@@ -5,6 +5,10 @@ import os
 conn = None
 cur = None
 
+user = None
+user_boards = []
+user_pages = []
+
 
 # @app.route('/contact')
 # def contact():
@@ -17,7 +21,9 @@ def create_app():
 
     global conn, cur
     try:
-        conn = psycopg2.connect("dbname='Merken' user='postgres' host='localhost' password='D3VAR5H'")
+        # conn = psycopg2.connect("dbname='Merken' user='postgres' host='localhost' password='D3VAR5H'")
+        conn = psycopg2.connect(
+            "dbname='dc89oj5md8msl7' user='bvnjfbtlujvlhk' host='ec2-52-71-231-180.compute-1.amazonaws.com' password='dc96ec7bea1f0e8613f64ad609f516249e19e592dfab944b9e95369b4e95a6bd'")
     except:
         print("I am unable to connect to the database")
     cur = conn.cursor()
@@ -27,10 +33,6 @@ def create_app():
 
     app.register_blueprint(useraccounts_routes.useraccounts_bp, url_prefix='/accounts')
     app.register_blueprint(boardnotes_routes.boardnotes_bp, url_prefix='/boards')
-
-    user = None
-    user_boards = []
-    user_pages = []
 
     def get_data():
         global user
