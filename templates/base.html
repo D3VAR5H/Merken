@@ -1,0 +1,245 @@
+<!doctype html>
+<html class="fixed" lang="en">
+
+<head>
+
+    <!-- Basic -->
+    <meta charset="UTF-8">
+
+    <meta name="keywords" content="HTML5 Admin Template"/>
+    <meta name="description" content="Merken - Responsive HTML5 Template">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <!-- Web Fonts  -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light"
+          rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker3.css') }}"/>
+
+
+    {% block stylesheet %}
+
+    {% endblock stylesheet %}
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}"/>
+
+    <!-- Skin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/default.css') }}"/>
+
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-custom.css') }}">
+
+
+    <!-- Head Libs -->
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+
+    <title> Merken </title>
+
+</head>
+
+<body>
+<!-- start: page -->
+<section class="body">
+    <!-- start: header -->
+    <header class="header">
+
+        <div class="align-center">
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logo-transparent.png') }}" height="50"
+                     alt="Merken-logo"/>
+            </a>
+        </div>
+
+        <div class="header-right">
+            {% if user is not none %}
+                <div id="userbox" class="userbox">
+                    <a href="#" data-toggle="dropdown">
+                        <figure class="profile-picture">
+                            <img src="{{ url_for('static', filename='images/!logged-user.jpg') }}" alt="Joseph Doe"
+                                 class="img-circle"
+                                 data-lock-picture="{{ url_for('static', filename='images/!logged-user.jpg') }}"/>
+                        </figure>
+                        <div class="profile-info" data-lock-name="John Doe" data-lock-email="user.email_id">
+                            <span class="name">{{ user.username }}</span>
+                        </div>
+
+                        <i class="fa custom-caret"></i>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <ul class="list-unstyled">
+                            <li class="divider"></li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="{{ url_for('useraccounts.profile') }}"><i
+                                        class="fa fa-user"></i> My Profile</a>
+                            </li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="#" data-lock-screen="true"><i
+                                        class="fa fa-lock"></i> Lock Screen</a>
+                            </li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="{{ url_for('useraccounts.logout') }}"><i
+                                        class="fa fa-power-off"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+    <!-- end: header -->
+
+    <div class="inner-wrapper">
+        <!-- start: sidebar -->
+        <aside id="sidebar-left" class="sidebar-left">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    Navigation
+                </div>
+                <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html"
+                     data-fire-event="sidebar-left-toggle">
+                    <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                </div>
+            </div>
+
+            <div class="nano">
+                <div class="nano-content">
+                    <nav id="menu" class="nav-main" role="navigation">
+                        <ul class="nav nav-main">
+
+                            {% block profile %}
+                                <li>
+                                    <a href="{{ url_for('useraccounts.profile') }}">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                            {% endblock profile %}
+
+                            {#                            {% block dashboard %}#}
+                            {#                                <li>#}
+                            {#                                    <a href="{{ url_for('boardnotes.dashboard') }}">#}
+                            {#                                        <i class="fa fa-home" aria-hidden="true"></i>#}
+                            {#                                        <span>Dashboard</span>#}
+                            {#                                    </a>#}
+                            {#                                </li>#}
+                            {#                            {% endblock dashboard %}#}
+
+                            {% block board %}
+                                <li class="nav-parent" onmouseenter="expand(this)" onmouseleave="collapse(this)">
+                                    <a href="{{ url_for('boardnotes.board') }}">
+                                        <i class="fa fa-book" aria-hidden="true"></i>
+                                        <span>Notebooks</span>
+                                    </a>
+                                    <ul class="nav nav-children">
+                                        {% for board in user_boards %}
+                                            <li>
+                                                <a href="{{ url_for("boardnotes.page", board_id=board[0]) }}">
+                                                    <i class="fa fa-file-text"
+                                                       aria-hidden="true"></i>
+                                                    <span>{{ board[1] }}</span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endblock board %}
+
+                            {% block about %}
+                                <li>
+                                    <a href="{{ url_for('about') }}">
+                                        <i class="fa fa-pagelines" aria-hidden="true"></i>
+                                        <span>About us</span>
+                                    </a>
+                                </li>
+                            {% endblock about %}
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </aside>
+
+        <section role="main" class="content-body">
+            <header class="page-header">
+                {% block title %}
+                    <h2>Base Page</h2>
+                {% endblock title %}
+
+                <div class="right-wrapper pull-right">
+                    <ol class="breadcrumbs">
+                        <li>
+                            <a href="{{ url_for('boardnotes.board') }}">
+                                <i class="fa fa-home"></i>
+                            </a>
+                        </li>
+                        {% block path %}
+                            <li><span>Pages</span></li>
+                            <li><span>Base Page</span></li>
+                        {% endblock path %}
+                    </ol>
+                    <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
+                </div>
+
+                <aside id="sidebar-right" class="sidebar-right">
+
+                </aside>
+
+            </header>
+
+            <!-- start: subpage -->
+            {% block subpage %}
+
+            {% endblock subpage %}
+            <!-- end: subpage -->
+        </section>
+        <!-- end: sidebar -->
+</section>
+</div>
+
+<!-- end: page -->
+
+<!-- Vendor -->
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.browser.mobile.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nanoscroller.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.placeholder.js') }}"></script>
+
+<!-- Theme Base, Components and Settings -->
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
+<!-- Theme Custom -->
+<script src="{{ url_for('static', filename='js/theme.custom.js') }}"></script>
+
+<!-- Theme Initialization Files -->
+<script src="{{ url_for('static', filename='js/theme.init.js') }}"></script>
+
+<script type="text/javascript">
+    function expand(element) {
+        console.log(element)
+        element.classList.add('nav-expanded');
+    }
+
+    function collapse(element) {
+        element.classList.remove('nav-expanded');
+    }
+</script>
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+</body>
+
+</html>

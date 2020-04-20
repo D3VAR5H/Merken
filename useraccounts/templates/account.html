@@ -1,0 +1,86 @@
+<!doctype html>
+<html class="fixed" lang="en">
+
+<head>
+
+    <!-- Basic -->
+    <meta charset="UTF-8">
+
+    <meta name="keywords" content="HTML5 Admin Template"/>
+    <meta name="description" content="Merken - Responsive HTML5 Template">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <!-- Web Fonts  -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light"
+          rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker3.css') }}"/>
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}"/>
+
+    <!-- Skin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/default.css') }}"/>
+
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-custom.css') }}">
+
+    <!-- Head Libs -->
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+    <title> Merken </title>
+
+</head>
+
+<body>
+<!-- start: page -->
+<section class="body">
+    <!-- start: header -->
+    <header class="header">
+        <div class="align-content-center">
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logo-transparent.png') }}" height="50"
+                     alt="Merken-logo"/>
+            </a>
+        </div>
+
+        {% block user_info %}
+
+        {% endblock user_info %}
+    </header>
+    <!-- end: header -->
+
+    {% block container %}
+
+    {% endblock container %}
+
+    <!-- end: page -->
+</section>
+
+<!-- Vendor -->
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.browser.mobile.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nanoscroller.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.placeholder.js') }}"></script>
+
+<!-- Theme Base, Components and Settings -->
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
+<!-- Theme Custom -->
+<script src="{{ url_for('static', filename='js/theme.custom.js') }}"></script>
+
+<!-- Theme Initialization Files -->
+<script src="{{ url_for('static', filename='js/theme.init.js') }}"></script>
+
+</body>
+
+</html>

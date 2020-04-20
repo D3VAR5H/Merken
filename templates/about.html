@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <li><span>About us</span></li>
+{% endblock path %}
+
+{% block about %}
+    <li class="nav-active">
+        <a href="#">
+            <i class="fa fa-pagelines" aria-hidden="true"></i>
+            <span>About us</span>
+        </a>
+    </li>
+{% endblock about %}
+
+{% block title %}
+    <h2>About us</h2>
+{% endblock title %}
+
+{% block subpage %}
+    <section class="panel panel-featured-left panel-featured-primary">
+        <header class="panel-heading">
+            <h2 class="panel-title">Welcome To Merken !</h2>
+        </header>
+        <div class="panel-body">
+            <p>Merken, your number one source for remainder. We're dedicated to giving
+                you the very best of merken, with a focus on user's task activities, remainders
+                and short-notes. We now serve customers all over Ahmedabad and are thrilled that
+                we're able to turn our passion into our own website.
+                We hope you enjoy our products as much as we enjoy offering them to you.
+                If you have any questions or comments, please don't hesitate to contact us.</p>
+        </div>
+    </section>
+    <section class="panel panel-featured-left panel-featured-primary">
+        <header class="panel-heading">
+            <h2 class="panel-title">Developers</h2>
+        </header>
+        <div class="panel-body">
+            <div class="row">
+                <div class="isotope-item document col-sm-6 col-md-4 col-lg-4">
+                    <div class="thumbnail">
+                        <div class="thumb-preview">
+                            <img src="{{ url_for('static',filename='images/devarsh.jpeg') }}"
+                                 class="img-responsive" alt="Developer">
+                        </div>
+                        <h5 class="mg-title text-semibold">Devarsh Patel </h5>
+                        <small>Chairman</small>
+                    </div>
+                </div>
+                <div class="isotope-item document col-sm-6 col-md-4 col-lg-4">
+                    <div class="thumbnail">
+                        <div class="thumb-preview">
+                            <img src="{{ url_for('static',filename='images/parths.jpg') }}"
+                                 class="img-responsive" alt="Developer">
+                        </div>
+                        <h5 class="mg-title text-semibold">Parth Sarkhelia</h5>
+                        <small>Managing Director</small>
+                    </div>
+                </div>
+                <div class="isotope-item document col-sm-6 col-md-4 col-lg-4">
+                    <div class="thumbnail">
+                        <div class="thumb-preview">
+                            <img src="{{ url_for('static',filename='images/tejas.jpg') }}"
+                                 class="img-responsive" alt="Developer">
+                        </div>
+                        <h5 class="mg-title text-semibold">Tejas Chauhan</h5>
+                        <small>CEO</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock subpage %}

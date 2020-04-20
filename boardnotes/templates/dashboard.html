@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <li><span>Dashboard</span></li>
+{% endblock path %}
+
+{% block dashboard %}
+    <li class="nav-active">
+        <a href="#">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+{% endblock dashboard %}
+
+{% block board %}
+    <li class="nav-parent nav-active" onmouseenter="expand(this)" onmouseleave="collapse(this)">
+        <a href="{{ url_for('boardnotes.board') }}">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            <span>Boards</span>
+        </a>
+        <ul class="nav nav-children">
+            {% for board in user_boards %}
+                <li>
+                    <a href="{{ url_for("boardnotes.page", board_id=board[0]) }}">
+                        <i class="fa fa-file-text"
+                           aria-hidden="true"></i>
+                        <span>{{ board[1] }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock board %}
+
+{% block title %}
+    <h2>Dashboard</h2>
+{% endblock title %}
+
+{% block subpage %}
+
+{% endblock subpage %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <li><span>Profile</span></li>
+    <li><span>Timeline</span></li>
+{% endblock path %}
+
+{% block profile %}
+    <li class="nav-active">
+        <a href="{{ url_for('useraccounts.profile') }}">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span>Profile</span>
+        </a>
+    </li>
+{% endblock profile %}
+
+{% block title %}
+    <h2>Profile</h2>
+{% endblock title %}
+
+{% block subpage %}
+    <div class="timeline">
+        <div class="tm-body">
+            {% if logs.month %}
+                {% for month in logs.month %}
+                    <div class="tm-title">
+                        <h3 class="h5 text-uppercase">{{ month[0] }}</h3>
+                    </div>
+
+                    <ol class="tm-items">
+                        {% for log in logs.data[0] %}
+                            {% if month[0] == log[5] %}
+                                <li>
+                                    <div class="tm-info">
+                                        {% if log[0] == 'Pages' %}
+                                            <div class="tm-icon"><i class="fa fa-file-text"></i></div>
+                                        {% else %}
+                                            <div class="tm-icon"><i class="fa fa-book"></i></div>
+                                        {% endif %}
+
+                                        <time class="tm-datetime" datetime="{{ log[2] }}">
+                                            <div class="tm-datetime-date">{{ log[3] }}</div>
+                                            <div class="tm-datetime-time">{{ log[4] }}</div>
+                                        </time>
+                                    </div>
+                                    <div class="tm-box appear-animation fadeInRight appear-animation-visible"
+                                         data-appear-animation="fadeInRight"
+                                         data-appear-animation-delay="100" style="animation-delay: 100ms">
+                                        <p>{{ log[1] }}</p>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock subpage %}
+
+{% block stylesheet %}
+
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/jquery.appear.js') }}"></script>
+{% endblock javascript %}

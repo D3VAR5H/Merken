@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <li><span>Notebooks</span></li>
+    <li><span>Pages</span></li>
+{% endblock path %}
+
+{% block board %}
+    <li class="nav-parent nav-active" onmouseenter="expand(this)" onmouseleave="collapse(this)">
+        <a href="{{ url_for('boardnotes.board') }}">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            <span>Notebooks</span>
+        </a>
+        <ul class="nav nav-children">
+            {% for board in user_boards %}
+                <li>
+                    <a href="{{ url_for("boardnotes.page", board_id=board[0]) }}">
+                        <i class="fa fa-file-text"
+                           aria-hidden="true"></i>
+                        <span>{{ board[1] }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock board %}
+
+{% block title %}
+    <h2>Pages</h2>
+{% endblock title %}
+
+{% block subpage %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="mt-none"
+                id="popup_hide">My Pages
+                <button type="button"
+                        class="mb-xs mt-xs mr-xs btn btn-primary pull-right"
+                        onclick="open_popup()">
+                    <i class="fa fa-plus"></i>
+                    Add Page
+                </button>
+            </h3>
+            <section class="body-sign"
+                     id="popup-form">
+                <div class="center-sign">
+                    <div class="panel panel-sign">
+                        <div class="panel-title-sign mt-xl text-center">
+                            <h3 class="title text-uppercase text-bold m-none"><i class="fa
+                            fa-user mr-xs"></i>Add Page
+                            </h3>
+                        </div>
+                        <div class="panel-body"
+                             id="replace-popup-form">
+                            <div class="form-group mb-lg">
+                                <label>Name</label>
+                                <div class="input-group input-group-icon">
+                                    <input name="page_name"
+                                           type="text"
+                                           class="form-control input-lg"
+                                           id="page_name"
+                                           required/>
+                                </div>
+                            </div>
+                            {#                            <div class="form-group mb-lg">#}
+                            {#                                <label>Data</label>#}
+                            {#                                <div class="input-group input-group-icon">#}
+                            {#                                    <textarea name="page_desc" type="text" class="form-control input-lg"#}
+                            {#                                       id="page_desc">#}
+                            {#                                    </textarea>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button class="btn btn-primary"
+                                            onclick="add_pages()">Add
+                                    </button>
+                                    <button class="btn btn-primary cancel"
+                                            onclick="close_popup()">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <div class="row">
+        {% for page in pages %}
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <section class="panel"
+                         onmouseenter="panel_body_show('{{ 'pbody%s'%page[0] }}')"
+                         onmouseleave="panel_body_hide('{{ 'pbody%s' %page[0] }}')">
+                    <div id="userbox" class="userbox" style="width: 100%">
+                        <a href="#" class="col-xs-12" data-toggle="dropdown"
+                           style="text-decoration: none">
+                            <header class="panel-heading panel-featured-left panel-featured-primary">
+                                <h2 class="panel-title">{{ page[1] }}</h2>
+                            </header>
+
+                            <div class="panel-body panel-featured-left panel-featured-primary"
+                                 style="display: none; color: #0a0a0a"
+                                 id='{{ 'pbody%s' %page[0] }}'>
+                                <p>{{ page[2]|safe }}</p>
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a role="menuitem" tabindex="-1"
+                                       href="{{ url_for('boardnotes.page_editor', page_id=page[0]) }}">
+                                        <i class="fa fa-eraser"></i> Edit Page</a>
+                                </li>
+                                <li>
+                                    <a role="menuitem" tabindex="-1"
+                                       href="{{ url_for('boardnotes.delete_page',
+                                       page_id=page[0]) }}">
+                                        <i class="fa fa-recycle"></i> Delete Page</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock subpage %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+        function open_popup() {
+            document.getElementById("popup-form").style.display = "block";
+            document.getElementById("popup_hide").style.display = "none";
+        }
+
+        function close_popup() {
+            document.getElementById("popup-form").style.display = "none";
+            document.getElementById("popup_hide").style.display = "block";
+        }
+
+        function add_pages() {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "{{ url_for('boardnotes.add_page') }}",
+                    data: {
+                        board_id: {{ board_id }},
+                        page_name: document.getElementById("page_name").value
+                        {#page_data: document.getElementById("page_desc").value#}
+                    },
+                    success: function (data) {
+                        document.getElementById("popup-form").style.display = "none";
+                        document.getElementById("popup_hide").style.display = "block";
+                        window.location.href = "{{ url_for('boardnotes.page',board_id=board_id) }}";
+                    }
+                })
+        }
+
+        function expand(element) {
+            console.log(element)
+            element.classList.add('nav-expanded');
+        }
+
+        function panel_body_show(element) {
+            document.getElementById(element).style.display = "block";
+        }
+
+        function panel_body_hide(element) {
+            document.getElementById(element).style.display = "none";
+        }
+    </script>
+{% endblock javascript %}
+
+{##}
+{#<a href="{{ url_for('boardnotes.page_editor', page_id=page[0]) }}" style="text-decoration: none">#}
+{#                    <section class="panel panel-featured-left panel-featured-primary"#}
+{#                             onmouseenter="panel_body_show('{{ 'pbody%s'%page[0] }}')"#}
+{#                             onmouseleave="panel_body_hide('{{ 'pbody%s' %page[0] }}')">#}
+{##}
+{#                        <header class="panel-heading">#}
+{#                            <h2 class="panel-title">{{ page[1] }}</h2>#}
+{#                        </header>#}
+{##}
+{#                        <div class="panel-body" style="display: none"#}
+{#                             id='{{ 'pbody%s' %page[0] }}'>#}
+{#                            <p>{{ page[2]|safe }}</p>#}
+{#                        </div>#}
+{#                    </section>#}
+{#                </a>#}

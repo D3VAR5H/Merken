@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block path %}
+    <li><span>Profile</span></li>
+{% endblock path %}
+
+{% block profile %}
+    <li class="nav-active">
+        <a href="#">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span>Profile</span>
+        </a>
+    </li>
+{% endblock profile %}
+
+{% block title %}
+    <h2>Profile</h2>
+{% endblock title %}
+
+{% block subpage %}
+    <div class="row">
+
+        <div class="col-md-4 col-lg-3">
+
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="thumb-info mb-md">
+                        <img src="{{ user.profile_photo or url_for('static', filename='images/!logged-user.jpg') }}"
+                             class="rounded img-responsive" alt="{{ user.username }}">
+                        <div class="thumb-info-title">
+                            <span class="thumb-info-inner">{{ user.name }}</span>
+                            <span class="thumb-info-type">{{ user.username }}</span>
+                        </div>
+                    </div>
+                    {% if user.bio %}
+                        <hr class="dotted short">
+
+                        <h6 class="text-muted">About</h6>
+                        <p>{{ user.bio }}</p>
+                    {% endif %}
+
+                    <hr class="dotted short">
+
+                    <div class="social-icons-list">
+                        {% if user.fb_handle %}
+                            <a rel="tooltip" data-placement="bottom" target="_blank" href="{{ user.fb_handle }}"
+                               data-original-title="Facebook"><i class="fa fa-facebook"></i><span>Facebook</span></a>
+                        {% endif %}
+                        {% if user.twitter_handle %}
+                            <a rel="tooltip" data-placement="bottom" href="{{ user.twitter_handle }}"
+                               data-original-title="Twitter"><i class="fa fa-twitter"></i><span>Twitter</span></a>
+                        {% endif %}
+                        {% if user.linkedin_handle %}
+                            <a rel="tooltip" data-placement="bottom" href="{{ user.linkedin_handle }}"
+                               data-original-title="Linkedin"><i class="fa fa-linkedin"></i><span>Linkedin</span></a>
+                        {% endif %}
+                        {% if user.instagram_handle %}
+                            <a rel="tooltip" data-placement="bottom" href="{{ user.ig_handle }}"
+                               data-original-title="Instagram"><i class="fa fa-instagram"></i><span>Instagram</span></a>
+                        {% endif %}
+                        {% if user.github_handle %}
+                            <a rel="tooltip" data-placement="bottom" href="{{ user.github_handle }}"
+                               data-original-title="Github"><i class="fa fa-github"></i><span>Github</span></a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </section>
+        </div>
+        <div class="col-md-8 col-lg-6">
+
+            <div class="tabs">
+                <ul class="nav nav-tabs tabs-primary">
+                    <li class="active">
+                        <a href="#overview" data-toggle="tab">Overview</a>
+                    </li>
+                    <li>
+                        <a href="#edit" data-toggle="tab">Edit</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="overview" class="tab-pane active">
+
+                        <h4 class="mb-xlg">Timeline</h4>
+
+                        <div class="timeline timeline-simple mt-xlg mb-md">
+                            <div class="tm-body">
+                                {% if logs.data %}
+                                    <div class="tm-title">
+                                        <h3 class="h5 text-uppercase">{{ logs.month[0][0] }}</h3>
+                                    </div>
+                                    <ol class="tm-items">
+                                        {% for log in logs.data[0] %}
+                                            {% if logs.month[0][0] == log[5] %}
+                                                <li>
+                                                    <div class="tm-box">
+                                                        <p class="text-muted">
+                                                            {{ log[3] }} {{ ' ' }} {{ log[4] }}
+                                                        </p>
+                                                        <p>{{ log[1] }}</p>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ol>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a style="text-decoration:none" href="{{ url_for('useraccounts.timeline') }}">
+                            <h6 style="margin:9px" class="mb-xlg text-muted">Expand</h6>
+                        </a>
+                    </div>
+                    <div id="edit" class="tab-pane">
+
+                        <form class="form-horizontal" method="POST">
+                            <h4 class="mb-xlg">Personal Information</h4>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Profile photo</label>
+                                    <div class="col-md-9">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="input-append">
+                                                <div class="uneditable-input">
+                                                    <i class="fa fa-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                                <span class="btn btn-default btn-file">
+																<span class="fileupload-exists">Change</span>
+																<span class="fileupload-new">Select file</span>
+																<input type="file"/>
+															</span>
+                                                <a href="#" class="btn btn-default fileupload-exists"
+                                                   data-dismiss="fileupload">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="profile_name">Name</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="profile_name" name="profile_name"
+                                               value="{{ user.name }}">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr class="dotted tall">
+                            <h4 class="mb-xlg">About Yourself</h4>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="profile_bio">Biographical Info</label>
+                                    <div class="col-md-8">
+                                        <textarea class="form-control" rows="3" id="profile_bio"
+                                                  name="profile_bio"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr class="dotted tall">
+                            <h4 class="mb-xlg">Handles</h4>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="fb_handle">Facebook</label>
+                                    <div class="col-md-8">
+                                        {% if user.fb_handle %}
+                                            <input type="text" class="form-control" id="fb_handle"
+                                                   name="fb_handle"
+                                                   value="{{ user.fb_handle }}">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="fb_handle"
+                                                   name="fb_handle"
+                                                   placeholder="Enter your Facebook link">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="twitter_handle">Twitter</label>
+                                    <div class="col-md-8">
+                                        {% if user.twitter_handle %}
+                                            <input type="text" class="form-control" id="twitter_handle"
+                                                   name="twitter_handle"
+                                                   value="{{ user.twitter_handle }}">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="twitter_handle"
+                                                   name="twitter_handle"
+                                                   placeholder="Enter your Twitter link">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="instagram_handle">Instagram</label>
+                                    <div class="col-md-8">
+                                        {% if user.ig_handle %}
+                                            <input type="text" class="form-control" id="instagram_handle"
+                                                   name="ig_handle"
+                                                   value="{{ user.ig_handle }}">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="instagram_handle"
+                                                   name="ig_handle"
+                                                   placeholder="Enter your Instagram link">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="linkedIn_handle">LinkedIn</label>
+                                    <div class="col-md-8">
+                                        {% if user.linkedin_handle %}
+                                            <input type="text" class="form-control" id="linkedIn_handle"
+                                                   name="linkedIn_handle"
+                                                   value="{{ user.linkedin_handle }}">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="linkedIn_handle"
+                                                   name="linkedIn_handle"
+                                                   placeholder="Enter your LinkedIn link">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="github_handle">Github</label>
+                                    <div class="col-md-8">
+                                        {% if user.github_handle %}
+                                            <input type="text" class="form-control" id="github_handle"
+                                                   name="github_handle"
+                                                   value="{{ user.github_handle }}">
+                                        {% else %}
+                                            <input type="text" class="form-control" id="github_handle"
+                                                   name="github_handle"
+                                                   placeholder="Enter your Github link">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr class="dotted tall">
+                            <h4 class="mb-xlg">Change Password</h4>
+                            <fieldset class="mb-xl">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="pwd">New Password</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="pwd">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="pwd_repeat">Repeat New
+                                        Password</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="pwd_repeat">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="reset" class="btn btn-default">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-3">
+
+            <h4 class="mb-md">Your content</h4>
+            <ul class="simple-card-list mb-xlg">
+                <li class="primary">
+                    <h3>{{ user_boards|length }}</h3>
+                    <p>Boards</p>
+                </li>
+                <li class="primary">
+                    <h3>{{ user_pages|length }}</h3>
+                    <p>Pages</p>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+{% endblock subpage %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-fileupload.min.css') }}">
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/bootstrap-fileupload.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.appear.js') }}"></script>
+{% endblock javascript %}
