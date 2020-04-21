@@ -67,7 +67,7 @@
                                  class="img-circle"
                                  data-lock-picture="{{ url_for('static', filename='images/!logged-user.jpg') }}"/>
                         </figure>
-                        <div class="profile-info" data-lock-name="John Doe" data-lock-email="user.email_id">
+                        <div class="profile-info" data-lock-name="{{ user.name }}" data-lock-email="{{ user.email_id }}">
                             <span class="name">{{ user.username }}</span>
                         </div>
 
