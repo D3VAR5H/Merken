@@ -21,8 +21,8 @@ def create_app():
 
     global conn, cur
     try:
-        conn = psycopg2.connect("dbname='Merken' user='postgres' host='localhost' password='D3VAR5H'")
-        # conn = psycopg2.connect("dbname='d1cv1lfk6k1vhv' user='qmeeuebusohvdl' host='ec2-52-202-146-43.compute-1.amazonaws.com' password='1e1d8032fddfd56f8f84c3a5a1cc98f13d6205cdd4c203152a3976d783705731'")
+        conn = psycopg2.connect(
+            "dbname='d91afrge4kgtr6' user='yitfmownerxauw' host='ec2-52-201-55-4.compute-1.amazonaws.com' password='4fc0f67d20051a8b20ebbb756edf60a303c29b73c17e355fe7e187aa390cef6e'")
     except:
         print("I am unable to connect to the database")
     cur = conn.cursor()
