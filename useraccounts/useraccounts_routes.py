@@ -8,8 +8,7 @@ from flask import render_template, Blueprint, request, redirect, url_for
 from .forms import SignUpForm, LoginForm, RecoverPasswordForm, EditProfileForm
 from run import conn, cur
 
-useraccounts_bp = Blueprint('useraccounts', __name__, template_folder='templates',
-                            static_folder='static')
+useraccounts_bp = Blueprint('useraccounts', __name__, template_folder='templates', static_folder='static')
 user = None
 user_boards = []
 user_pages = []
@@ -83,8 +82,7 @@ def hash_password(password):
 def valid_email(email):
     import requests
     email_address = email
-    response = requests.get("https://isitarealemail.com/api/email/validate",
-                            params={'email': email_address})
+    response = requests.get("https://isitarealemail.com/api/email/validate", params={'email': email_address})
     print(response.json()['status'])
     if response.json()['status'] == 'valid':
         return True
@@ -98,11 +96,14 @@ def signup():
     if request.method == 'POST' and form.check_username(form.username.data) and form.check_email(
             form.email.data) and valid_email(form.email.data) and form.check_passwords(form.pwd.data,
                                                                                        form.pwd_confirm.data) and form.check_name(
-        form.name.data):
-        query = f"INSERT INTO Users(username, pwd, email_id, user_name, birth_date) VALUES ('{form.username.data}', '{hash_password(form.pwd.data)}', '{form.email.data}', '{form.name.data}', '{form.dob.data}')"
-        cur.execute(query)
-        conn.commit()
-        return redirect(url_for('useraccounts.login'))
+            form.name.data):
+        try:
+            query = f"INSERT INTO Users(username, pwd, email_id, user_name, birth_date) VALUES ('{form.username.data}', '{hash_password(form.pwd.data)}', '{form.email.data}', '{form.name.data}', '{form.dob.data}')"
+            cur.execute(query)
+            conn.commit()
+            return redirect(url_for('useraccounts.login'))
+        except:
+            print('User Already exists')
     return render_template('signup.html', title='Sign Up', form=form)
 
 
@@ -110,15 +111,19 @@ def signup():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST':
-        query = f"SELECT user_id FROM Users WHERE (username='{form.username_email.data}' AND pwd='{hash_password(form.pwd.data)}') OR (email_id='{form.username_email.data}' AND pwd='{hash_password(form.pwd.data)}');"
-        cur.execute(query)
-        temp = cur.fetchall()
-        user_id = temp[0][0]
-        load_user(user_id)
-        if len(temp) != 0:
-            if request.values.get("c") is not None:
-                return redirect(f'{request.values.get("c")}')
-            return redirect(url_for('boardnotes.board'))
+        try:
+            query = f"SELECT user_id FROM users WHERE (username='{form.username_email.data}' AND pwd='{hash_password(form.pwd.data)}') OR (email_id='{form.username_email.data}' AND pwd='{hash_password(form.pwd.data)}');"
+            cur.execute(query)
+            temp = cur.fetchall()
+            print(temp)
+            user_id = temp[0][0]
+            load_user(user_id)
+            if len(temp) != 0:
+                if request.values.get("c") is not None:
+                    return redirect(f'{request.values.get("c")}')
+                return redirect(url_for('boardnotes.board'))
+        except:
+            print('invalid')
     return render_template('login.html', title='Login', form=form)
 
 
@@ -129,7 +134,6 @@ def recover_password():
         lettersAndDigits = string.ascii_letters + string.digits
         pwd = ''.join(random.choice(lettersAndDigits) for i in range(16))
         print(pwd)
-
         try:
             query = f"UPDATE Users SET pwd='{hash_password(pwd)}' WHERE email_id = '{form.email.data}'"
             cur.execute(query)
@@ -153,15 +157,16 @@ def profile():
                  hash_password(form.pwd_repeat.data)]
         print(query)
         final_pwd = ''
-        if form.pwd.data == form.pwd_repeat.data and form.pwd.data is not '':
-            final_pwd = hash_password(form.pwd.data)
+        if form.pwd.data == form.pwd_repeat.data and (form.pwd.data is not '' or form.pwd.data is not None):
+            final_pwd = form.pwd.data
 
         cur.callproc('user_profile_updates', [user['user_id'], '', form.profile_name.data, form.profile_bio.data,
                                               form.fb_handle.data, form.twitter_handle.data, form.ig_handle.data,
                                               form.linkedIn_handle.data, form.github_handle.data,
-                                              final_pwd, ])
+                                              hash_password(final_pwd), ])
         temp = cur.fetchall()
-        print(temp)
+        conn.commit()
+        return redirect(url_for('useraccounts.profile'))
 
     cur.callproc('get_active_months', [user['user_id'], ])
     temp = cur.fetchall()
@@ -174,7 +179,6 @@ def profile():
 
     logs = {'month': month, 'data': data}
 
-    print(logs)
     return render_template('profile.html', title='Profile', user=user, user_boards=user_boards, user_pages=user_pages,
                            logs=logs)
 
