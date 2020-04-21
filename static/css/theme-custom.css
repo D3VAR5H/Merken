@@ -9,6 +9,10 @@
     display: none;
 }
 
+#popup-rename-form {
+    display: none;
+}
+
 .page-editor {
     margin-left: 0 !important;
 }

@@ -72,9 +72,46 @@
                     </div>
                 </div>
             </section>
+            <section class="body-sign" id="popup-rename-form">
+                <div class="center-sign">
+                    <div class="panel panel-sign">
+                        <div class="panel-title-sign mt-xl text-center">
+                            <h3 class="title text-uppercase text-bold m-none"><i class="fa fa-user mr-xs"></i>Rename
+                                Notebook
+                            </h3>
+                        </div>
+                        <div class="panel-body" id="replace-popup-form">
+                            <div class="form-group mb-lg">
+                                <label>Name</label>
+                                <div class="input-group input-group-icon">
+                                    <input name="board_rename_name" type="text" class="form-control input-lg"
+                                           id="board_rename_name"
+                                           required/>
+                                </div>
+                            </div>
 
+                            <div class="form-group mb-lg">
+                                <label>Description</label>
+                                <div class="input-group input-group-icon">
+                                    <input name="board_rename_desc" type="text" class="form-control
+                                    input-lg" id="board_rename_desc">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button class="btn btn-primary" onclick="rename_boards()">Save</button>
+                                    <button class="btn btn-primary cancel" onclick="close_popup_rename()">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
+
     <div class="row" id="popup_hide">
         <h5 class="text-semibold text-dark text-uppercase mb-md mt-lg"></h5>
         {% for board in user_boards %}
@@ -100,19 +137,23 @@
                                 </div>
                             </div>
                         </a>
-
                         <div class="dropdown-menu">
                             <ul class="list-unstyled">
                                 <li>
                                     <a role="menuitem" tabindex="-1"
                                        href="{{ url_for('boardnotes.page',board_id= board[0]) }}">
-                                        <i class="fa fa-eraser"></i> Edit Board</a>
+                                        <i class="fa fa-file-o"></i> Open Board</a>
+                                </li>
+                                <li>
+                                    <a role="menuitem" tabindex="-1"
+                                       onclick="open_popup_rename({{ board[0] }})">
+                                        <i class="fa fa-pencil-square-o"></i> Rename Board</a>
                                 </li>
                                 <li>
                                     <a role="menuitem" tabindex="-1"
                                        href="{{ url_for('boardnotes.delete_board',
                                        board_id=board[0]) }}">
-                                        <i class="fa fa-recycle"></i> Delete Board</a>
+                                        <i class="fa fa-trash-o"></i> Delete Board</a>
                                 </li>
                             </ul>
                         </div>
@@ -126,6 +167,10 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        let board_id_temp;
+        let board_name_temp;
+        let board_desc_temp;
+
         function open_popup() {
             document.getElementById("popup-form").style.display = "block";
             document.getElementById("popup_hide").style.display = "none";
@@ -153,7 +198,37 @@
                 })
         }
 
+        function open_popup_rename(board_id) {
+            board_id_temp = board_id;
+            document.getElementById("popup-rename-form").style.display = "block";
+            document.getElementById("popup_hide").style.display = "none";
+        }
+
+        function close_popup_rename() {
+            document.getElementById("popup-rename-form").style.display = "none";
+            document.getElementById("popup_hide").style.display = "block";
+        }
+
+        function rename_boards() {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "{{ url_for('boardnotes.rename_board') }}",
+                    data: {
+                        board_id: board_id_temp,
+                        board_name: document.getElementById("board_rename_name").value,
+                        board_desc: document.getElementById("board_rename_desc").value
+                    },
+                    success: function (data) {
+                        document.getElementById("popup-rename-form").style.display = "none";
+                        document.getElementById("popup_hide").style.display = "block";
+                        window.location.href = "{{ url_for('boardnotes.board') }}";
+                    }
+                })
+        }
+
         function delete_board(boardid) {
+
             window.location.href = "{{ url_for('boardnotes.delete_board', board_id=boardid)}}"
         }
     </script>

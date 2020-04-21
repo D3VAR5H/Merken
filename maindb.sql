@@ -199,24 +199,25 @@ RETURNS TRIGGER AS
 $BODY$
 DECLARE
     var_r record;
-BEGIN IF (TG_OP = 'UPDATE') THEN
-        IF NEW.page_name<>OLD.page_name THEN
-INSERT INTO user_logs(user_id, board_id, page_id, old_name, new_name, log_date, type, content)
-VALUES (userid, OLD.board_id, OLD.page_id, OLD.page_name, NEW.page_name, CURRENT_TIMESTAMP, 'UPDATE', 'Pages');
-END IF;
-IF NEW.page_data<>OLD.page_data THEN
-INSERT INTO user_logs(user_id, board_id, page_id, old_data, new_data, log_date, type, content)
-VALUES (userid, OLD.board_id, OLD.page_id, OLD.page_data, NEW.page_data, CURRENT_TIMESTAMP, 'UPDATE', 'Pages');
-END IF;
-IF NEW.status<>OLD.status THEN
-INSERT INTO user_logs(user_id, board_id, page_id, log_date, type, content)
-VALUES (userid, OLD.board_id, OLD.page_id, CURRENT_TIMESTAMP, 'REMOVED', 'Pages');
-END IF;
-END IF;
-IF (TG_OP = 'INSERT') THEN
+BEGIN
 SELECT * INTO var_r
 FROM boards
 WHERE boards.board_id = NEW.board_id;
+IF (TG_OP = 'UPDATE') THEN
+    IF NEW.page_name<>OLD.page_name THEN
+INSERT INTO user_logs(user_id, board_id, page_id, old_name, new_name, log_date, type, content)
+VALUES (var_r.user_id, OLD.board_id, OLD.page_id, OLD.page_name, NEW.page_name, CURRENT_TIMESTAMP, 'UPDATE', 'Pages');
+END IF;
+IF NEW.page_data<>OLD.page_data THEN
+INSERT INTO user_logs(user_id, board_id, page_id, old_data, new_data, log_date, type, content)
+VALUES (var_r.user_id, OLD.board_id, OLD.page_id, OLD.page_data, NEW.page_data, CURRENT_TIMESTAMP, 'UPDATE', 'Pages');
+END IF;
+IF NEW.status<>OLD.status THEN
+INSERT INTO user_logs(user_id, board_id, page_id, log_date, type, content)
+VALUES (var_r.user_id, OLD.board_id, OLD.page_id, CURRENT_TIMESTAMP, 'REMOVED', 'Pages');
+END IF;
+END IF;
+IF (TG_OP = 'INSERT') THEN
 INSERT INTO user_logs(user_id, board_id, page_id, new_name, log_date, type, content)
 VALUES (var_r.user_id, NEW.board_id, NEW.page_id, NEW.page_name, CURRENT_TIMESTAMP, 'INSERT', 'Pages');
 END IF;

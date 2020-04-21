@@ -113,13 +113,13 @@
                                 <li>
                                     <a role="menuitem" tabindex="-1"
                                        href="{{ url_for('boardnotes.page_editor', page_id=page[0]) }}">
-                                        <i class="fa fa-eraser"></i> Edit Page</a>
+                                        <i class="fa fa-file-o"></i> Open Page</a>
                                 </li>
                                 <li>
                                     <a role="menuitem" tabindex="-1"
                                        href="{{ url_for('boardnotes.delete_page',
                                        page_id=page[0]) }}">
-                                        <i class="fa fa-recycle"></i> Delete Page</a>
+                                        <i class="fa fa-trash-o"></i> Delete Page</a>
                                 </li>
                             </ul>
                         </div>
@@ -177,20 +177,3 @@
         }
     </script>
 {% endblock javascript %}
-
-{##}
-{#<a href="{{ url_for('boardnotes.page_editor', page_id=page[0]) }}" style="text-decoration: none">#}
-{#                    <section class="panel panel-featured-left panel-featured-primary"#}
-{#                             onmouseenter="panel_body_show('{{ 'pbody%s'%page[0] }}')"#}
-{#                             onmouseleave="panel_body_hide('{{ 'pbody%s' %page[0] }}')">#}
-{##}
-{#                        <header class="panel-heading">#}
-{#                            <h2 class="panel-title">{{ page[1] }}</h2>#}
-{#                        </header>#}
-{##}
-{#                        <div class="panel-body" style="display: none"#}
-{#                             id='{{ 'pbody%s' %page[0] }}'>#}
-{#                            <p>{{ page[2]|safe }}</p>#}
-{#                        </div>#}
-{#                    </section>#}
-{#                </a>#}

@@ -52,6 +52,20 @@ def delete_board(board_id):
     return redirect(url_for('boardnotes.board'))
 
 
+@boardnotes_bp.route('/rename_board/', methods=['POST', 'GET'])
+@useraccounts_routes.login_required
+def rename_board():
+    get_data()
+    boardid = request.form['board_id']
+    boardname = request.form['board_name']
+    boarddesc = request.form['board_desc']
+    data = {'board_name': boardname, 'board_desc': boarddesc}
+    query = f"UPDATE boards SET board_name = '{boardname}', description = '{boarddesc}' WHERE board_id={boardid}"
+    cur.execute(query)
+    conn.commit()
+    return jsonify(data)
+
+
 @boardnotes_bp.route('/add_board/', methods=['POST'])
 @useraccounts_routes.login_required
 def add_board():
